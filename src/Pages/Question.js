@@ -156,6 +156,7 @@ class Question extends Component {
                     </Row>
                 </Grid>
 
+                {/*新增問題*/}
                 <Modal show={this.state.show} onHide={this.handleClose}>
                     <Modal.Header closeButton>
                         <Modal.Title>新增問題</Modal.Title>

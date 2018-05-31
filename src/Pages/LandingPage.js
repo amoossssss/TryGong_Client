@@ -4,7 +4,6 @@
 
 import React, {Component} from 'react';
 import {Grid, Row, Col, Jumbotron, Button, Image, Glyphicon} from 'react-bootstrap'
-import {LinkContainer} from 'react-router-bootstrap';
 import '../PageStyle/LandingPage.css'
 import trygong from '../Static/TryGong.png'
 import amos from '../Static/Creator/Amos.jpg'
@@ -26,9 +25,7 @@ class Notices extends Component {
                     <hr className="Bottom-line"/>
                     <h2>去中心化意見交流平台</h2>
                     <Button bsSize="large" style={{border: "2px solid", marginTop: "20px"}}>
-                        {/*<LinkContainer to="/login">*/}
-                            我想踹共！
-                        {/*</LinkContainer>*/}
+                        我想踹共！
                     </Button>
                 </Jumbotron>
                 <Jumbotron>
