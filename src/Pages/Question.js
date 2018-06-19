@@ -29,24 +29,24 @@ class Question extends Component {
     constructor(props, context) {
         super(props, context);
 
-        this.handleShow = this.handleShow.bind(this);
-        this.handleClose = this.handleClose.bind(this);
+        this.handleAddQuestionShow = this.handleAddQuestionShow.bind(this);
+        this.handleAddQuestionClose = this.handleAddQuestionClose.bind(this);
         this.questionChange = this.questionChange.bind(this);
         this.descChange = this.descChange.bind(this);
 
         this.state = {
-            show: false,
+            showAddQuestion: false,
             question: '',
             desc: '',
         };
     }
 
-    handleClose() {
-        this.setState({show: false});
+    handleAddQuestionClose() {
+        this.setState({showAddQuestion: false});
     }
 
-    handleShow() {
-        this.setState({show: true});
+    handleAddQuestionShow() {
+        this.setState({showAddQuestion: true});
     }
 
     questionChange(e) {
@@ -92,10 +92,11 @@ class Question extends Component {
                                 bsSize="large"
                                 block
                                 style={{backgroundColor: "#222222", color: "white"}}
-                                onClick={this.handleShow}>
+                                onClick={this.handleAddQuestionShow}>
                                 我要發問
                             </Button>
                         </Col>
+
                         <Col xs={4} xsOffset={1} md={4} mdOffset={1}>
                             <Jumbotron className="QuestionPanel">
                                 <h2 style={{marginTop: "0px"}}>題目</h2>
@@ -157,7 +158,7 @@ class Question extends Component {
                 </Grid>
 
                 {/*新增問題*/}
-                <Modal show={this.state.show} onHide={this.handleClose}>
+                <Modal show={this.state.showAddQuestion} onHide={this.handleAddQuestionClose}>
                     <Modal.Header closeButton>
                         <Modal.Title>新增問題</Modal.Title>
                     </Modal.Header>
@@ -204,7 +205,7 @@ class Question extends Component {
                     </Modal.Body>
                     <Modal.Footer>
                         <Button style={{backgroundColor: "#222222", color: "white"}}>提交</Button>
-                        <Button onClick={this.handleClose}>取消</Button>
+                        <Button onClick={this.handleAddQuestionClose}>取消</Button>
                     </Modal.Footer>
                 </Modal>
             </div>

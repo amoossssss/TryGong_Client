@@ -126,7 +126,7 @@ class Register extends Component {
             let PrivateKey = this.state.privateKey;
 
             // TODO 串接API
-            fetch('/api/register', {
+            fetch('http://140.119.40.43:3000/users/register', {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
