@@ -138,7 +138,7 @@ class Register extends Component {
                     email: Email,
                     password: Password,
                     address: Address,
-                    txPassword: PrivateKey,
+                    privateKey: PrivateKey,
                 })
             })
         }
