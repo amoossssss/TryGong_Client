@@ -16,6 +16,21 @@ import payment from '../Static/Icon/pay.png'
 import vote from '../Static/Icon/review.png'
 
 class Notices extends Component {
+
+    constructor(props, context) {
+        super(props, context);
+        this.moveToRegister = this.moveToRegister.bind(this);
+    }
+
+    moveToRegister(){
+        if(localStorage.getItem("cookie")===null) {
+            window.location.replace('/register');
+        }
+        else{
+            window.location.replace('/question');
+        }
+    }
+
     render() {
         return (
             <div>
@@ -24,7 +39,7 @@ class Notices extends Component {
                     <hr className="Top-line"/>
                     <hr className="Bottom-line"/>
                     <h2>去中心化意見交流平台</h2>
-                    <Button bsSize="large" style={{border: "2px solid", marginTop: "20px"}}>
+                    <Button bsSize="large" style={{border: "2px solid", marginTop: "20px"}} onClick={this.moveToRegister}>
                         我想踹共！
                     </Button>
                 </Jumbotron>

@@ -14,10 +14,17 @@ import {
     FormControl,
     ControlLabel,
 } from 'react-bootstrap'
-import DatePicker from 'react-date-picker';
+import InputMoment from 'input-moment';
+import moment from 'moment';
 import '../PageStyle/Question.css'
+import '../../node_modules/input-moment/dist/input-moment.css'
 
+// User
 let name;
+let schoolNum;
+let balance;
+
+// Pagination
 let active = 1;
 let items = [];
 for (let number = 1; number <= 10; number++) {
@@ -25,6 +32,7 @@ for (let number = 1; number <= 10; number++) {
         <Pagination.Item key={number} active={number === active}>{number}</Pagination.Item>
     );
 }
+
 
 class Question extends Component {
 
@@ -37,21 +45,70 @@ class Question extends Component {
         this.handleQuestionClose = this.handleQuestionClose.bind(this);
         this.questionChange = this.questionChange.bind(this);
         this.descChange = this.descChange.bind(this);
-        this.dateChange = this.dateChange.bind(this);
+        this.rewardChange = this.rewardChange.bind(this);
+        this.tagChange = this.tagChange.bind(this);
+        this.createQuestion = this.createQuestion.bind(this);
 
         this.state = {
             showAddQuestion: false,
             showQuestion: false,
             question: '',
             desc: '',
-            date: '',
+            tag: 'school',
+            due: moment(),
+            reward: 0,
+            balance: 0,
         };
     }
 
     componentWillMount() {
+        const self = this;
+
         let retrievedObject = JSON.parse(localStorage.getItem('cookie'));
         name = retrievedObject.name;
+        schoolNum = retrievedObject.schoolNum;
+
+        fetch('http://192.168.43.215:5000/users/getETH', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                address: retrievedObject.address,
+            })
+        }).then(function (response) {
+            return response.json(); //<- response 處理成 json 格式,  記得 return!
+        }).then(function (json) {
+            console.log(json);
+        });
+
+        fetch('http://192.168.43.215:5000/users/getTGC', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                address: retrievedObject.address,
+            })
+        }).then(function (response) {
+            return response.json();
+        }).then(function (json) {
+            console.log(json);
+            balance = json.TGCvalue;
+            self.setState({balance: balance});
+        });
     }
+
+    handleChange = due => {
+        this.setState({due});
+    };
+
+    handleSave = () => {
+        console.log('saved', this.state.due.format('llll'));
+        console.log('timestamp', new Date(this.state.due).getTime());
+    };
 
 
     handleAddQuestionClose() {
@@ -78,8 +135,56 @@ class Question extends Component {
         this.setState({desc: e.target.value});
     }
 
-    dateChange(date) {
-        this.setState({date: date});
+    rewardChange(e) {
+        this.setState({reward: e.target.value});
+    }
+
+    tagChange(e) {
+        this.setState({tag: e.target.value});
+        console.log(e.target.value);
+    }
+
+    createQuestion(event) {
+        event.preventDefault();
+
+        let QuestionName = this.state.question;
+        let Text = this.state.desc;
+        let Money = this.state.reward;
+        let Tag = this.state.tag;
+        let Time = new Date(this.state.due).getTime();
+        let UserName = name;
+        let SchoolNum = schoolNum;
+
+        // console.log(QuestionName);
+        // console.log(Text);
+        // console.log(Money);
+        // console.log(Tag);
+        // console.log(Time);
+        // console.log(UserName);
+        // console.log(SchoolNum);
+
+        fetch('http://localhost:5000/users/newQuestion', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                questionName: QuestionName,
+                text: Text,
+                money: Money,
+                tag: Tag,
+                time: Time,
+                userName: UserName,
+                schoolNum: SchoolNum,
+
+            })
+        }).then(function (response) {
+            return response.json();
+        }).then(function (json) {
+            console.log(json);
+        })
+
     }
 
     render() {
@@ -89,11 +194,15 @@ class Question extends Component {
                     <Row>
                         <Col xs={3} md={3} className="Left-panel">
                             <Jumbotron className="Left">
-                                <h1>
+                                <h1 style={{fontSize: '46px'}}>
                                     {name}
                                 </h1>
-                                <h3>
-                                    <Glyphicon glyph="piggy-bank"/>：200TGC
+                                <h2>
+                                    {schoolNum}
+                                </h2>
+                                <h3 style={{marginTop: '30px'}}>
+                                    <Glyphicon glyph="piggy-bank" style={{marginRight: '0px'}}/>：
+                                    {this.state.balance} TGC
                                 </h3>
                                 <h3>
                                     發問：2次
@@ -117,7 +226,7 @@ class Question extends Component {
                             <Button
                                 bsSize="large"
                                 block
-                                style={{backgroundColor: "#222222", color: "white"}}
+                                style={{backgroundColor: "#222222", color: "white", width: '300px'}}
                                 onClick={this.handleAddQuestionShow}>
                                 我要發問
                             </Button>
@@ -215,21 +324,44 @@ class Question extends Component {
 
                                         <FormGroup controlId="formControlsSelect">
                                             <ControlLabel style={{marginTop: "20px"}}>類型</ControlLabel>
-                                            <FormControl componentClass="select" placeholder="select">
+                                            <FormControl componentClass="select" placeholder="select"
+                                                         onChange={this.tagChange}
+                                                         value={this.state.tag} >
                                                 <option value="school">校園</option>
                                                 <option value="sport">運動</option>
                                                 <option value="test">考題</option>
                                                 <option value="life">生活</option>
                                                 <option value="news">時事</option>
+                                                <option value="others">其他</option>
                                             </FormControl>
+                                        </FormGroup>
+
+                                        <FormGroup >
+                                            <ControlLabel style={{marginTop: "20px"}}>賞金</ControlLabel>
+                                            <FormControl type="number"
+                                                         id="reward"
+                                                         name="reward"
+                                                         onChange={this.rewardChange}
+                                                         placeholder="請輸入賞金"/>
                                         </FormGroup>
 
                                         <FormGroup>
                                             <ControlLabel style={{marginTop: "20px"}}>截止日期</ControlLabel>
                                             <div>
-                                                <DatePicker
-                                                    onChange={this.dateChange}
-                                                    value={this.state.date}
+                                                <FormControl type="text"
+                                                             id="dueTime"
+                                                             disabled
+                                                             value={this.state.due.format('llll')}
+                                                             name="dueTime"
+                                                             style={{marginBottom: '10px'}}/>
+                                                <InputMoment
+                                                    moment={this.state.due}
+                                                    onChange={this.handleChange}
+                                                    onSave={this.handleSave}
+                                                    minStep={1} // default
+                                                    hourStep={1} // default
+                                                    prevMonthIcon="ion-ios-arrow-left" // default
+                                                    nextMonthIcon="ion-ios-arrow-right" // default
                                                 />
                                             </div>
                                         </FormGroup>
@@ -239,11 +371,13 @@ class Question extends Component {
                         </Grid>
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button style={{backgroundColor: "#222222", color: "white"}}>提交</Button>
+                        <Button onClick={this.createQuestion}
+                                style={{backgroundColor: "#222222", color: "white"}}>提交</Button>
                         <Button onClick={this.handleAddQuestionClose}>取消</Button>
                     </Modal.Footer>
                 </Modal>
 
+                {/*回答問題*/}
                 <Modal show={this.state.showQuestion} onHide={this.handleQuestionClose}>
                     <Modal.Header closeButton>
                         <Modal.Title>回答問題</Modal.Title>

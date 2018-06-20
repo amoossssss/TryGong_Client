@@ -4,6 +4,7 @@
 
 .jumbotron.Left {
     background-color: #222222;
+    width: 300px;
 }
 
 .jumbotron.LeftBottom {
@@ -11,6 +12,7 @@
     background-color: white;
     border: 8px solid #222222;
     border-radius: 15px;
+    width: 300px;
 }
 
 .pagination>li>a {

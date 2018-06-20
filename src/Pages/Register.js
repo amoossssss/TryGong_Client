@@ -11,6 +11,8 @@ import Web3 from 'web3';
 const web3 = new Web3(Web3.givenProvider || "http://localhost:8545");
 web3.eth.getAccounts().then(console.log);
 
+// web3.eth.getBalance("0xB152C7ee10096D254EfDE999a8838eA6Fd52c542").then(console.log);
+
 let decAccount;
 let passwordState = 0;
 
@@ -131,7 +133,7 @@ class Register extends Component {
             console.log(decAccount.privateKey);
 
             // TODO 串接API
-            fetch('http://localhost:5000/users/register', {
+            fetch('http://192.168.43.215:5000/users/register', {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
@@ -146,12 +148,11 @@ class Register extends Component {
                     privateKey: PrivateKey,
                 })
             }).then(function (response) {
-                return response.json(); //<- response 處理成 json 格式,  記得 return!
+                return response.json();
+            }).then(function (json) {
+                console.log(json);
+                window.location.replace("/login");
             })
-                .then(function (json) {
-                    console.log(json);
-                    // window.location.replace("/login");
-                })
         }
     }
 

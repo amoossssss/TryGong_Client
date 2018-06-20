@@ -36,7 +36,7 @@ class Login extends Component {
         let SchoolNum = this.state.schoolNum;
         let Password = this.state.password;
 
-        fetch('http://localhost:5000/users/login', {
+        fetch('http://192.168.43.215:5000/users/login', {
             method: 'POST',
             credentials: 'same-origin',
             headers: {
@@ -47,20 +47,18 @@ class Login extends Component {
                 schoolNum: SchoolNum,
                 password: Password,
             })
+        }).then(function (res) {
+            return res.json();
+        }).then(function (json) {
+            console.log(json);
+            if (json.logined) {
+                localStorage.setItem('cookie', JSON.stringify(json));
+                window.location.replace('/question');
+            }
+            else {
+                alert("請重新確認帳號密碼是否正確！");
+            }
         })
-            .then(function (res) {
-                return res.json();
-            })
-            .then(function (json) {
-                console.log(json);
-                if (json.logined) {
-                    localStorage.setItem('cookie', JSON.stringify(json));
-                    window.location.replace('/question');
-                }
-                else{
-                    alert("請重新確認帳號密碼是否正確！");
-                }
-            })
     }
 
     render() {
