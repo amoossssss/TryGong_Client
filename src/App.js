@@ -8,6 +8,7 @@ import Logout from './Pages/Logout'
 import Register from './Pages/Register'
 import Question from './Pages/Question'
 import Detail from './Pages/Detail'
+import Transfer from './Pages/Transfer'
 import trygong from './Static/Tg.png'
 import './App.css';
 
@@ -31,6 +32,15 @@ class App extends Component {
                         <Navbar.Collapse>
 
                             <Nav pullRight>
+
+                                {localStorage.getItem("cookie") === null ?
+                                    null :
+                                    <LinkContainer to="/transfer">
+                                        <NavItem eventKey={5}>
+                                            交易
+                                        </NavItem>
+                                    </LinkContainer>
+                                }
 
                                 {localStorage.getItem("cookie") === null ?
                                     null :
@@ -76,6 +86,7 @@ class App extends Component {
                     <Route path="/register" component={Register}/>
                     <Route path="/logout" component={Logout}/>
                     <Route path="/detail/:id" component={Detail}/>
+                    <Route path="/transfer" component={Transfer}/>
 
 
                     <Navbar inverse fixedBottom>

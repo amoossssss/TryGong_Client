@@ -56,7 +56,7 @@ class Question extends Component {
         // this.handleQuestion2Show = this.handleQuestion2Show.bind(this);
         // this.handleQuestion3Show = this.handleQuestion3Show.bind(this);
         // this.handleQuestion4Show = this.handleQuestion4Show.bind(this);
-        // this.handleQuestionClose = this.handleQuestionClose.bind(this);
+        this.handleQuestionClose = this.handleQuestionClose.bind(this);
         this.detailQ1 = this.detailQ1.bind(this);
         this.detailQ2 = this.detailQ2.bind(this);
         this.detailQ3 = this.detailQ3.bind(this);
@@ -69,7 +69,7 @@ class Question extends Component {
 
         this.state = {
             showAddQuestion: false,
-            // showQuestion1: false,
+            showQuestion: false,
             // showQuestion2: false,
             // showQuestion3: false,
             // showQuestion4: false,
@@ -172,10 +172,10 @@ class Question extends Component {
             q3Time = q3.time;
             q4Time = q4.time;
 
-            let t1 = new Date(Number(q1Time));
-            let t2 = new Date(Number(q2Time));
-            let t3 = new Date(Number(q3Time));
-            let t4 = new Date(Number(q4Time));
+            let t1 = new Date(Number(q1Time*1000+28800000));
+            let t2 = new Date(Number(q2Time*1000+28800000));
+            let t3 = new Date(Number(q3Time*1000+28800000));
+            let t4 = new Date(Number(q4Time*1000+28800000));
 
             q1Time = JSON.stringify(t1);
             q2Time = JSON.stringify(t2);
@@ -255,20 +255,20 @@ class Question extends Component {
         console.log(e.target.value);
     }
 
-    detailQ1(){
-        window.location.replace('/detail/'+this.state.q1Id);
+    detailQ1() {
+        window.location.replace('/detail/' + this.state.q1Id);
     }
 
-    detailQ2(){
-        window.location.replace('/detail/'+this.state.q2Id);
+    detailQ2() {
+        window.location.replace('/detail/' + this.state.q2Id);
     }
 
-    detailQ3(){
-        window.location.replace('/detail/'+this.state.q3Id);
+    detailQ3() {
+        window.location.replace('/detail/' + this.state.q3Id);
     }
 
-    detailQ4(){
-        window.location.replace('/detail/'+this.state.q4Id);
+    detailQ4() {
+        window.location.replace('/detail/' + this.state.q4Id);
     }
 
     createQuestion(event) {
@@ -314,8 +314,8 @@ class Question extends Component {
             return response.json();
         }).then(function (json) {
             console.log(json);
-            this.handleQuestionClose();
             alert(json.message);
+            window.location.reload();
         })
 
     }
@@ -337,12 +337,12 @@ class Question extends Component {
                                     <Glyphicon glyph="piggy-bank" style={{marginRight: '0px'}}/>：
                                     {this.state.balance} TGC
                                 </h3>
-                                <h3>
-                                    發問：2次
-                                </h3>
-                                <h3>
-                                    回答：5次
-                                </h3>
+                                {/*<h3>*/}
+                                    {/*發問：2次*/}
+                                {/*</h3>*/}
+                                {/*<h3>*/}
+                                    {/*回答：5次*/}
+                                {/*</h3>*/}
                             </Jumbotron>
                             <Jumbotron className="LeftBottom">
                                 <h3 style={{marginTop: "0px", marginBottom: "15px"}}>問題類型</h3>
@@ -387,32 +387,6 @@ class Question extends Component {
                                 <Button onClick={this.detailQ4}>檢視</Button>
                             </Jumbotron>
                         </Col>
-                        {/*<Col xs={4} xsOffset={0} md={4} mdOffset={0}>*/}
-                        {/*<Jumbotron className="QuestionPanel">*/}
-                        {/*<h2 style={{marginTop: "0px"}}>題目</h2>*/}
-                        {/*<p>截止日期</p>*/}
-                        {/*<Button style={{marginRight: "5px"}}>回答</Button>*/}
-                        {/*<Button style={{marginRight: "5px"}}>檢視</Button>*/}
-                        {/*</Jumbotron>*/}
-                        {/*<Jumbotron className="QuestionPanel">*/}
-                        {/*<h2 style={{marginTop: "0px"}}>題目</h2>*/}
-                        {/*<p>截止日期</p>*/}
-                        {/*<Button style={{marginRight: "5px"}}>回答</Button>*/}
-                        {/*<Button style={{marginRight: "5px"}}>檢視</Button>*/}
-                        {/*</Jumbotron>*/}
-                        {/*<Jumbotron className="QuestionPanel">*/}
-                        {/*<h2 style={{marginTop: "0px"}}>題目</h2>*/}
-                        {/*<p>截止日期</p>*/}
-                        {/*<Button style={{marginRight: "5px"}}>回答</Button>*/}
-                        {/*<Button style={{marginRight: "5px"}}>檢視</Button>*/}
-                        {/*</Jumbotron>*/}
-                        {/*<Jumbotron className="QuestionPanel">*/}
-                        {/*<h2 style={{marginTop: "0px"}}>題目</h2>*/}
-                        {/*<p>截止日期</p>*/}
-                        {/*<Button style={{marginRight: "5px"}}>回答</Button>*/}
-                        {/*<Button style={{marginRight: "5px"}}>檢視</Button>*/}
-                        {/*</Jumbotron>*/}
-                        {/*</Col>*/}
                     </Row>
                     <Row>
                         <Col xs={8} xsOffset={4} md={8} mdOffset={4}>
@@ -508,25 +482,6 @@ class Question extends Component {
                         <Button onClick={this.handleAddQuestionClose}>取消</Button>
                     </Modal.Footer>
                 </Modal>
-
-                {/*回答問題*/}
-                {/*<Modal show={this.state.showQuestion} onHide={this.handleQuestionClose}>*/}
-                {/*<Modal.Header closeButton>*/}
-                {/*<Modal.Title>回答問題</Modal.Title>*/}
-                {/*</Modal.Header>*/}
-                {/*<Modal.Body>*/}
-                {/*<Grid fluid>*/}
-                {/*<Row>*/}
-                {/*<Col xs={8} sm={8} md={8}>*/}
-
-                {/*</Col>*/}
-                {/*</Row>*/}
-                {/*</Grid>*/}
-                {/*</Modal.Body>*/}
-                {/*<Modal.Footer>*/}
-                {/*<Button onClick={this.handleQuestionClose}>取消</Button>*/}
-                {/*</Modal.Footer>*/}
-                {/*</Modal>*/}
             </div>
         );
     }
