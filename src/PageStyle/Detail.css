@@ -1,0 +1,23 @@
+.jumbotron.QuestionPanel {
+    height: 180px;
+}
+
+.jumbotron.Left {
+    background-color: #222222;
+}
+
+.jumbotron.LeftBottom {
+    color: #222222;
+    background-color: white;
+    border: 8px solid #222222;
+    border-radius: 15px;
+}
+
+.pagination>li>a {
+    color: black;
+}
+
+.Left-panel {
+    margin: 0 auto;
+    color: white;
+}

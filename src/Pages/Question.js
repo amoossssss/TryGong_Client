@@ -5,7 +5,6 @@ import {
     Row,
     Col,
     Jumbotron,
-    Pagination,
     Glyphicon,
     Checkbox,
     FormGroup,
@@ -13,6 +12,7 @@ import {
     Form,
     FormControl,
     ControlLabel,
+    Pager
 } from 'react-bootstrap'
 import InputMoment from 'input-moment';
 import moment from 'moment';
@@ -22,17 +22,28 @@ import '../../node_modules/input-moment/dist/input-moment.css'
 // User
 let name;
 let schoolNum;
+let address;
 let balance;
+let password;
 
-// Pagination
-let active = 1;
-let items = [];
-for (let number = 1; number <= 10; number++) {
-    items.push(
-        <Pagination.Item key={number} active={number === active}>{number}</Pagination.Item>
-    );
-}
-
+//Question
+let q1;
+let q1Name;
+let q1Time;
+let q1Id;
+let q2;
+let q2Name;
+let q2Time;
+let q2Id;
+let q3;
+let q3Name;
+let q3Time;
+let q3Id;
+let q4;
+let q4Name;
+let q4Time;
+let q4Id;
+let questionNum;
 
 class Question extends Component {
 
@@ -41,8 +52,15 @@ class Question extends Component {
 
         this.handleAddQuestionShow = this.handleAddQuestionShow.bind(this);
         this.handleAddQuestionClose = this.handleAddQuestionClose.bind(this);
-        this.handleQuestionShow = this.handleQuestionShow.bind(this);
-        this.handleQuestionClose = this.handleQuestionClose.bind(this);
+        // this.handleQuestion1Show = this.handleQuestion1Show.bind(this);
+        // this.handleQuestion2Show = this.handleQuestion2Show.bind(this);
+        // this.handleQuestion3Show = this.handleQuestion3Show.bind(this);
+        // this.handleQuestion4Show = this.handleQuestion4Show.bind(this);
+        // this.handleQuestionClose = this.handleQuestionClose.bind(this);
+        this.detailQ1 = this.detailQ1.bind(this);
+        this.detailQ2 = this.detailQ2.bind(this);
+        this.detailQ3 = this.detailQ3.bind(this);
+        this.detailQ4 = this.detailQ4.bind(this);
         this.questionChange = this.questionChange.bind(this);
         this.descChange = this.descChange.bind(this);
         this.rewardChange = this.rewardChange.bind(this);
@@ -51,13 +69,24 @@ class Question extends Component {
 
         this.state = {
             showAddQuestion: false,
-            showQuestion: false,
+            // showQuestion1: false,
+            // showQuestion2: false,
+            // showQuestion3: false,
+            // showQuestion4: false,
             question: '',
             desc: '',
             tag: 'school',
             due: moment(),
             reward: 0,
             balance: 0,
+            q1Name: '',
+            q2Name: '',
+            q3Name: '',
+            q4Name: '',
+            q1Id: '',
+            q2Id: '',
+            q3Id: '',
+            q4Id: '',
         };
     }
 
@@ -67,6 +96,8 @@ class Question extends Component {
         let retrievedObject = JSON.parse(localStorage.getItem('cookie'));
         name = retrievedObject.name;
         schoolNum = retrievedObject.schoolNum;
+        address = retrievedObject.address;
+        password = retrievedObject.password;
 
         fetch('http://192.168.43.215:5000/users/getETH', {
             method: 'POST',
@@ -99,6 +130,74 @@ class Question extends Component {
             balance = json.TGCvalue;
             self.setState({balance: balance});
         });
+
+        fetch('http://192.168.43.215:5000/users/getQuestionCount', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+        }).then(function (response) {
+            return response.json();
+        }).then(function (json) {
+            // console.log(json);
+            questionNum = json.getQuestionCount;
+            console.log(questionNum);
+        });
+
+        fetch('http://192.168.43.215:5000/users/getQuestionFour', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                page: 1,
+            })
+        }).then(function (response) {
+            return response.json();
+        }).then(function (json) {
+
+            q1 = json[0];
+            q2 = json[1];
+            q3 = json[2];
+            q4 = json[3];
+            q1Name = q1.questionName;
+            q2Name = q2.questionName;
+            q3Name = q3.questionName;
+            q4Name = q4.questionName;
+
+            q1Time = q1.time;
+            q2Time = q2.time;
+            q3Time = q3.time;
+            q4Time = q4.time;
+
+            let t1 = new Date(Number(q1Time));
+            let t2 = new Date(Number(q2Time));
+            let t3 = new Date(Number(q3Time));
+            let t4 = new Date(Number(q4Time));
+
+            q1Time = JSON.stringify(t1);
+            q2Time = JSON.stringify(t2);
+            q3Time = JSON.stringify(t3);
+            q4Time = JSON.stringify(t4);
+
+            q1Id = q1.id;
+            q2Id = q2.id;
+            q3Id = q3.id;
+            q4Id = q4.id;
+
+            self.setState({q1Name: q1Name});
+            self.setState({q2Name: q2Name});
+            self.setState({q3Name: q3Name});
+            self.setState({q4Name: q4Name});
+
+            self.setState({q1Id: q1Id});
+            self.setState({q2Id: q2Id});
+            self.setState({q3Id: q3Id});
+            self.setState({q4Id: q4Id});
+        });
+
     }
 
     handleChange = due => {
@@ -123,8 +222,20 @@ class Question extends Component {
         this.setState({showQuestion: false});
     }
 
-    handleQuestionShow() {
-        this.setState({showQuestion: true});
+    handleQuestion1Show() {
+        this.setState({showQuestion1: true});
+    }
+
+    handleQuestion2Show() {
+        this.setState({showQuestion2: true});
+    }
+
+    handleQuestion3Show() {
+        this.setState({showQuestion3: true});
+    }
+
+    handleQuestion4Show() {
+        this.setState({showQuestion4: true});
     }
 
     questionChange(e) {
@@ -144,6 +255,22 @@ class Question extends Component {
         console.log(e.target.value);
     }
 
+    detailQ1(){
+        window.location.replace('/detail/'+this.state.q1Id);
+    }
+
+    detailQ2(){
+        window.location.replace('/detail/'+this.state.q2Id);
+    }
+
+    detailQ3(){
+        window.location.replace('/detail/'+this.state.q3Id);
+    }
+
+    detailQ4(){
+        window.location.replace('/detail/'+this.state.q4Id);
+    }
+
     createQuestion(event) {
         event.preventDefault();
 
@@ -154,6 +281,8 @@ class Question extends Component {
         let Time = new Date(this.state.due).getTime();
         let UserName = name;
         let SchoolNum = schoolNum;
+        let Address = address;
+        let Password = password;
 
         // console.log(QuestionName);
         // console.log(Text);
@@ -162,8 +291,9 @@ class Question extends Component {
         // console.log(Time);
         // console.log(UserName);
         // console.log(SchoolNum);
+        // console.log(Address);
 
-        fetch('http://localhost:5000/users/newQuestion', {
+        fetch('http://192.168.43.215:5000/users/newQuestion', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -177,12 +307,15 @@ class Question extends Component {
                 time: Time,
                 userName: UserName,
                 schoolNum: SchoolNum,
-
+                address: Address,
+                password: Password,
             })
         }).then(function (response) {
             return response.json();
         }).then(function (json) {
             console.log(json);
+            this.handleQuestionClose();
+            alert(json.message);
         })
 
     }
@@ -232,62 +365,61 @@ class Question extends Component {
                             </Button>
                         </Col>
 
-                        <Col xs={4} xsOffset={1} md={4} mdOffset={1}>
+                        <Col xs={8} xsOffset={1} md={8} mdOffset={1}>
                             <Jumbotron className="QuestionPanel">
-                                <h2 style={{marginTop: "0px"}}>題目</h2>
-                                <p>截止日期</p>
-                                <Button onClick={this.handleQuestionShow} style={{marginRight: "5px"}}>回答</Button>
-                                <Button style={{marginRight: "5px"}}>檢視</Button>
+                                <h2 style={{marginTop: "0px"}}>{this.state.q1Name}</h2>
+                                <p>{q1Time}</p>
+                                <Button onClick={this.detailQ1}>檢視</Button>
                             </Jumbotron>
                             <Jumbotron className="QuestionPanel">
-                                <h2 style={{marginTop: "0px"}}>題目</h2>
-                                <p>截止日期</p>
-                                <Button style={{marginRight: "5px"}}>回答</Button>
-                                <Button style={{marginRight: "5px"}}>檢視</Button>
+                                <h2 style={{marginTop: "0px"}}>{this.state.q2Name}</h2>
+                                <p>{q2Time}</p>
+                                <Button onClick={this.detailQ2}>檢視</Button>
                             </Jumbotron>
                             <Jumbotron className="QuestionPanel">
-                                <h2 style={{marginTop: "0px"}}>題目</h2>
-                                <p>截止日期</p>
-                                <Button style={{marginRight: "5px"}}>回答</Button>
-                                <Button style={{marginRight: "5px"}}>檢視</Button>
+                                <h2 style={{marginTop: "0px"}}>{this.state.q3Name}</h2>
+                                <p>{q3Time}</p>
+                                <Button onClick={this.detailQ3}>檢視</Button>
                             </Jumbotron>
                             <Jumbotron className="QuestionPanel">
-                                <h2 style={{marginTop: "0px"}}>題目</h2>
-                                <p>截止日期</p>
-                                <Button style={{marginRight: "5px"}}>回答</Button>
-                                <Button style={{marginRight: "5px"}}>檢視</Button>
+                                <h2 style={{marginTop: "0px"}}>{this.state.q4Name}</h2>
+                                <p>{q4Time}</p>
+                                <Button onClick={this.detailQ4}>檢視</Button>
                             </Jumbotron>
                         </Col>
-                        <Col xs={4} xsOffset={0} md={4} mdOffset={0}>
-                            <Jumbotron className="QuestionPanel">
-                                <h2 style={{marginTop: "0px"}}>題目</h2>
-                                <p>截止日期</p>
-                                <Button style={{marginRight: "5px"}}>回答</Button>
-                                <Button style={{marginRight: "5px"}}>檢視</Button>
-                            </Jumbotron>
-                            <Jumbotron className="QuestionPanel">
-                                <h2 style={{marginTop: "0px"}}>題目</h2>
-                                <p>截止日期</p>
-                                <Button style={{marginRight: "5px"}}>回答</Button>
-                                <Button style={{marginRight: "5px"}}>檢視</Button>
-                            </Jumbotron>
-                            <Jumbotron className="QuestionPanel">
-                                <h2 style={{marginTop: "0px"}}>題目</h2>
-                                <p>截止日期</p>
-                                <Button style={{marginRight: "5px"}}>回答</Button>
-                                <Button style={{marginRight: "5px"}}>檢視</Button>
-                            </Jumbotron>
-                            <Jumbotron className="QuestionPanel">
-                                <h2 style={{marginTop: "0px"}}>題目</h2>
-                                <p>截止日期</p>
-                                <Button style={{marginRight: "5px"}}>回答</Button>
-                                <Button style={{marginRight: "5px"}}>檢視</Button>
-                            </Jumbotron>
-                        </Col>
+                        {/*<Col xs={4} xsOffset={0} md={4} mdOffset={0}>*/}
+                        {/*<Jumbotron className="QuestionPanel">*/}
+                        {/*<h2 style={{marginTop: "0px"}}>題目</h2>*/}
+                        {/*<p>截止日期</p>*/}
+                        {/*<Button style={{marginRight: "5px"}}>回答</Button>*/}
+                        {/*<Button style={{marginRight: "5px"}}>檢視</Button>*/}
+                        {/*</Jumbotron>*/}
+                        {/*<Jumbotron className="QuestionPanel">*/}
+                        {/*<h2 style={{marginTop: "0px"}}>題目</h2>*/}
+                        {/*<p>截止日期</p>*/}
+                        {/*<Button style={{marginRight: "5px"}}>回答</Button>*/}
+                        {/*<Button style={{marginRight: "5px"}}>檢視</Button>*/}
+                        {/*</Jumbotron>*/}
+                        {/*<Jumbotron className="QuestionPanel">*/}
+                        {/*<h2 style={{marginTop: "0px"}}>題目</h2>*/}
+                        {/*<p>截止日期</p>*/}
+                        {/*<Button style={{marginRight: "5px"}}>回答</Button>*/}
+                        {/*<Button style={{marginRight: "5px"}}>檢視</Button>*/}
+                        {/*</Jumbotron>*/}
+                        {/*<Jumbotron className="QuestionPanel">*/}
+                        {/*<h2 style={{marginTop: "0px"}}>題目</h2>*/}
+                        {/*<p>截止日期</p>*/}
+                        {/*<Button style={{marginRight: "5px"}}>回答</Button>*/}
+                        {/*<Button style={{marginRight: "5px"}}>檢視</Button>*/}
+                        {/*</Jumbotron>*/}
+                        {/*</Col>*/}
                     </Row>
                     <Row>
                         <Col xs={8} xsOffset={4} md={8} mdOffset={4}>
-                            <Pagination bsSize="medium" style={{marginBottom: "50px"}}>{items}</Pagination>
+                            <Pager>
+                                <Pager.Item href="#">Previous</Pager.Item>{' '}
+                                <Pager.Item href="#">Next</Pager.Item>
+                            </Pager>
                         </Col>
                     </Row>
                 </Grid>
@@ -326,7 +458,7 @@ class Question extends Component {
                                             <ControlLabel style={{marginTop: "20px"}}>類型</ControlLabel>
                                             <FormControl componentClass="select" placeholder="select"
                                                          onChange={this.tagChange}
-                                                         value={this.state.tag} >
+                                                         value={this.state.tag}>
                                                 <option value="school">校園</option>
                                                 <option value="sport">運動</option>
                                                 <option value="test">考題</option>
@@ -378,23 +510,23 @@ class Question extends Component {
                 </Modal>
 
                 {/*回答問題*/}
-                <Modal show={this.state.showQuestion} onHide={this.handleQuestionClose}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>回答問題</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <Grid fluid>
-                            <Row>
-                                <Col xs={8} sm={8} md={8}>
+                {/*<Modal show={this.state.showQuestion} onHide={this.handleQuestionClose}>*/}
+                {/*<Modal.Header closeButton>*/}
+                {/*<Modal.Title>回答問題</Modal.Title>*/}
+                {/*</Modal.Header>*/}
+                {/*<Modal.Body>*/}
+                {/*<Grid fluid>*/}
+                {/*<Row>*/}
+                {/*<Col xs={8} sm={8} md={8}>*/}
 
-                                </Col>
-                            </Row>
-                        </Grid>
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button onClick={this.handleQuestionClose}>取消</Button>
-                    </Modal.Footer>
-                </Modal>
+                {/*</Col>*/}
+                {/*</Row>*/}
+                {/*</Grid>*/}
+                {/*</Modal.Body>*/}
+                {/*<Modal.Footer>*/}
+                {/*<Button onClick={this.handleQuestionClose}>取消</Button>*/}
+                {/*</Modal.Footer>*/}
+                {/*</Modal>*/}
             </div>
         );
     }

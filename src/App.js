@@ -7,6 +7,7 @@ import Login from './Pages/Login'
 import Logout from './Pages/Logout'
 import Register from './Pages/Register'
 import Question from './Pages/Question'
+import Detail from './Pages/Detail'
 import trygong from './Static/Tg.png'
 import './App.css';
 
@@ -74,6 +75,7 @@ class App extends Component {
                     <Route path="/login" component={Login}/>
                     <Route path="/register" component={Register}/>
                     <Route path="/logout" component={Logout}/>
+                    <Route path="/detail/:id" component={Detail}/>
 
 
                     <Navbar inverse fixedBottom>

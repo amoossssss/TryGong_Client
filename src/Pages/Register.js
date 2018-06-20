@@ -13,7 +13,7 @@ web3.eth.getAccounts().then(console.log);
 
 // web3.eth.getBalance("0xB152C7ee10096D254EfDE999a8838eA6Fd52c542").then(console.log);
 
-let decAccount;
+// let decAccount;
 let passwordState = 0;
 
 class Register extends Component {
@@ -38,8 +38,8 @@ class Register extends Component {
             emailStatus: null,
             password: '',
             checkPassword: '',
-            address: '',
-            privateKey: '',
+            // address: '',
+            // privateKey: '',
         };
     }
 
@@ -115,10 +115,10 @@ class Register extends Component {
             this.setState({nameStatus: 'success'});
             this.setState({emailStatus: 'success'});
             // console.log("Create Account!");
-            decAccount = web3.eth.accounts.create();
+            // decAccount = web3.eth.accounts.create();
             // console.log(decAccount);
-            this.setState({address: decAccount.address});
-            this.setState({privateKey: decAccount.privateKey});
+            // this.setState({address: decAccount.address});
+            // this.setState({privateKey: decAccount.privateKey});
 
             let SchoolNum = this.state.schoolNum;
             let Name = this.state.name;
@@ -126,11 +126,11 @@ class Register extends Component {
             let Password = this.state.password;
             // let Address = this.state.address;
             // let PrivateKey = this.state.privateKey;
-            let Address = decAccount.address;
-            let PrivateKey = decAccount.privateKey;
+            // let Address = decAccount.address;
+            // let PrivateKey = decAccount.privateKey;
 
-            console.log(decAccount.address);
-            console.log(decAccount.privateKey);
+            // console.log(decAccount.address);
+            // console.log(decAccount.privateKey);
 
             // TODO 串接API
             fetch('http://192.168.43.215:5000/users/register', {
@@ -144,8 +144,8 @@ class Register extends Component {
                     name: Name,
                     email: Email,
                     password: Password,
-                    address: Address,
-                    privateKey: PrivateKey,
+                    // address: Address,
+                    // privateKey: PrivateKey,
                 })
             }).then(function (response) {
                 return response.json();
