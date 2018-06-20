@@ -122,11 +122,16 @@ class Register extends Component {
             let Name = this.state.name;
             let Email = this.state.email;
             let Password = this.state.password;
-            let Address = this.state.address;
-            let PrivateKey = this.state.privateKey;
+            // let Address = this.state.address;
+            // let PrivateKey = this.state.privateKey;
+            let Address = decAccount.address;
+            let PrivateKey = decAccount.privateKey;
+
+            console.log(decAccount.address);
+            console.log(decAccount.privateKey);
 
             // TODO 串接API
-            fetch('http://140.119.40.43:3000/users/register', {
+            fetch('http://localhost:5000/users/register', {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
@@ -140,7 +145,13 @@ class Register extends Component {
                     address: Address,
                     privateKey: PrivateKey,
                 })
+            }).then(function (response) {
+                return response.json(); //<- response 處理成 json 格式,  記得 return!
             })
+                .then(function (json) {
+                    console.log(json);
+                    // window.location.replace("/login");
+                })
         }
     }
 

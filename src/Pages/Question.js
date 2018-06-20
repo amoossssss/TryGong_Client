@@ -14,8 +14,10 @@ import {
     FormControl,
     ControlLabel,
 } from 'react-bootstrap'
+import DatePicker from 'react-date-picker';
 import '../PageStyle/Question.css'
 
+let name;
 let active = 1;
 let items = [];
 for (let number = 1; number <= 10; number++) {
@@ -31,15 +33,26 @@ class Question extends Component {
 
         this.handleAddQuestionShow = this.handleAddQuestionShow.bind(this);
         this.handleAddQuestionClose = this.handleAddQuestionClose.bind(this);
+        this.handleQuestionShow = this.handleQuestionShow.bind(this);
+        this.handleQuestionClose = this.handleQuestionClose.bind(this);
         this.questionChange = this.questionChange.bind(this);
         this.descChange = this.descChange.bind(this);
+        this.dateChange = this.dateChange.bind(this);
 
         this.state = {
             showAddQuestion: false,
+            showQuestion: false,
             question: '',
             desc: '',
+            date: '',
         };
     }
+
+    componentWillMount() {
+        let retrievedObject = JSON.parse(localStorage.getItem('cookie'));
+        name = retrievedObject.name;
+    }
+
 
     handleAddQuestionClose() {
         this.setState({showAddQuestion: false});
@@ -49,11 +62,24 @@ class Question extends Component {
         this.setState({showAddQuestion: true});
     }
 
+    handleQuestionClose() {
+        this.setState({showQuestion: false});
+    }
+
+    handleQuestionShow() {
+        this.setState({showQuestion: true});
+    }
+
     questionChange(e) {
         this.setState({question: e.target.value});
     }
+
     descChange(e) {
         this.setState({desc: e.target.value});
+    }
+
+    dateChange(date) {
+        this.setState({date: date});
     }
 
     render() {
@@ -64,7 +90,7 @@ class Question extends Component {
                         <Col xs={3} md={3} className="Left-panel">
                             <Jumbotron className="Left">
                                 <h1>
-                                    Amos
+                                    {name}
                                 </h1>
                                 <h3>
                                     <Glyphicon glyph="piggy-bank"/>：200TGC
@@ -77,7 +103,7 @@ class Question extends Component {
                                 </h3>
                             </Jumbotron>
                             <Jumbotron className="LeftBottom">
-                                <h3 style={{marginTop:"0px",marginBottom:"15px"}}>問題類型</h3>
+                                <h3 style={{marginTop: "0px", marginBottom: "15px"}}>問題類型</h3>
                                 <FormGroup>
                                     <Checkbox inline>全選</Checkbox> <Checkbox inline>校園</Checkbox>
                                 </FormGroup>
@@ -101,7 +127,7 @@ class Question extends Component {
                             <Jumbotron className="QuestionPanel">
                                 <h2 style={{marginTop: "0px"}}>題目</h2>
                                 <p>截止日期</p>
-                                <Button style={{marginRight: "5px"}}>回答</Button>
+                                <Button onClick={this.handleQuestionShow} style={{marginRight: "5px"}}>回答</Button>
                                 <Button style={{marginRight: "5px"}}>檢視</Button>
                             </Jumbotron>
                             <Jumbotron className="QuestionPanel">
@@ -198,6 +224,15 @@ class Question extends Component {
                                             </FormControl>
                                         </FormGroup>
 
+                                        <FormGroup>
+                                            <ControlLabel style={{marginTop: "20px"}}>截止日期</ControlLabel>
+                                            <div>
+                                                <DatePicker
+                                                    onChange={this.dateChange}
+                                                    value={this.state.date}
+                                                />
+                                            </div>
+                                        </FormGroup>
                                     </Form>
                                 </Col>
                             </Row>
@@ -206,6 +241,24 @@ class Question extends Component {
                     <Modal.Footer>
                         <Button style={{backgroundColor: "#222222", color: "white"}}>提交</Button>
                         <Button onClick={this.handleAddQuestionClose}>取消</Button>
+                    </Modal.Footer>
+                </Modal>
+
+                <Modal show={this.state.showQuestion} onHide={this.handleQuestionClose}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>回答問題</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <Grid fluid>
+                            <Row>
+                                <Col xs={8} sm={8} md={8}>
+
+                                </Col>
+                            </Row>
+                        </Grid>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button onClick={this.handleQuestionClose}>取消</Button>
                     </Modal.Footer>
                 </Modal>
             </div>

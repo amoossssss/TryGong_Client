@@ -4,6 +4,7 @@ import {BrowserRouter as Router, Route} from "react-router-dom";
 import {LinkContainer} from 'react-router-bootstrap';
 import LandingPage from './Pages/LandingPage';
 import Login from './Pages/Login'
+import Logout from './Pages/Logout'
 import Register from './Pages/Register'
 import Question from './Pages/Question'
 import trygong from './Static/Tg.png'
@@ -29,22 +30,39 @@ class App extends Component {
                         <Navbar.Collapse>
 
                             <Nav pullRight>
-                                <LinkContainer to="/question">
-                                    <NavItem eventKey={1}>
-                                        問題
-                                    </NavItem>
-                                </LinkContainer>
-                                <LinkContainer to="/login">
-                                    <NavItem eventKey={2}>
-                                        登入
-                                    </NavItem>
-                                </LinkContainer>
 
-                                <LinkContainer to="/register">
-                                    <NavItem eventKey={3}>
-                                        註冊
-                                    </NavItem>
-                                </LinkContainer>
+                                {localStorage.getItem("cookie") === null ?
+                                    null :
+                                    <LinkContainer to="/question">
+                                        <NavItem eventKey={1}>
+                                            問題
+                                        </NavItem>
+                                    </LinkContainer>
+                                }
+
+                                {localStorage.getItem("cookie") === null ?
+                                    <LinkContainer to="/login">
+                                        <NavItem eventKey={2}>
+                                            登入
+                                        </NavItem>
+                                    </LinkContainer>
+                                    :
+                                    <LinkContainer to="/logout">
+                                        <NavItem eventKey={4}>
+                                            登出
+                                        </NavItem>
+                                    </LinkContainer>
+                                }
+
+                                {localStorage.getItem("cookie") === null ?
+                                    <LinkContainer to="/register">
+                                        <NavItem eventKey={3}>
+                                            註冊
+                                        </NavItem>
+                                    </LinkContainer>
+                                    :
+                                    null
+                                }
                             </Nav>
 
                         </Navbar.Collapse>
@@ -55,6 +73,7 @@ class App extends Component {
                     <Route path="/question" component={Question}/>
                     <Route path="/login" component={Login}/>
                     <Route path="/register" component={Register}/>
+                    <Route path="/logout" component={Logout}/>
 
 
                     <Navbar inverse fixedBottom>

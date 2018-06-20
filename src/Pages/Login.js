@@ -17,13 +17,13 @@ class Login extends Component {
         this.passwordChange = this.passwordChange.bind(this);
 
         this.state = {
-            account: '',
+            schoolNum: '',
             password: '',
         };
     }
 
     accountChange(e) {
-        this.setState({account: e.target.value});
+        this.setState({schoolNum: e.target.value});
     }
 
     passwordChange(e) {
@@ -33,21 +33,34 @@ class Login extends Component {
     loginTryGong(event) {
         event.preventDefault();
 
-        let Account = this.state.account;
+        let SchoolNum = this.state.schoolNum;
         let Password = this.state.password;
 
-        // TODO 串接API
-        fetch('/api/login', {
+        fetch('http://localhost:5000/users/login', {
             method: 'POST',
+            credentials: 'same-origin',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                account: Account,
+                schoolNum: SchoolNum,
                 password: Password,
             })
         })
+            .then(function (res) {
+                return res.json();
+            })
+            .then(function (json) {
+                console.log(json);
+                if (json.logined) {
+                    localStorage.setItem('cookie', JSON.stringify(json));
+                    window.location.replace('/question');
+                }
+                else{
+                    alert("請重新確認帳號密碼是否正確！");
+                }
+            })
     }
 
     render() {

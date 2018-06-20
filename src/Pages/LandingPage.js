@@ -33,22 +33,22 @@ class Notices extends Component {
                     <Grid>
                         <Row>
                             <Col xs={3} md={3}>
-                                <Image square src={question} style={{width: "60%"}}/>
+                                <Image square="true" src={question} style={{width: "60%"}}/>
                                 <h3>解決問題</h3>
                                 <p>問題找不到喜歡的答案嗎？來<Image src={trygong} style={{width: "100px"}}/>！</p>
                             </Col>
                             <Col xs={3} md={3}>
-                                <Image square src={vote} style={{width: "60%"}}/>
+                                <Image square="true" src={vote} style={{width: "60%"}}/>
                                 <h3>投票機制</h3>
                                 <p>群眾意見，清晰明瞭。</p>
                             </Col>
                             <Col xs={3} md={3}>
-                                <Image square src={payment} style={{width: "60%"}}/>
+                                <Image square="true" src={payment} style={{width: "60%"}}/>
                                 <h3>知識獎勵</h3>
                                 <p>回答問題，獲得虛擬貨幣。</p>
                             </Col>
                             <Col xs={3} md={3}>
-                                <Image square src={blockchain} style={{width: "60%"}}/>
+                                <Image square="true" src={blockchain} style={{width: "60%"}}/>
                                 <h3>區塊鏈</h3>
                                 <p>沒有中心化機構控管，公開透明。</p>
                             </Col>
